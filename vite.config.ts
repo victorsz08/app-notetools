@@ -1,0 +1,27 @@
+import { defineConfig } from "vite";
+import { devtools } from "@tanstack/devtools-vite";
+import viteReact from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
+import { fileURLToPath, URL } from "node:url";
+
+export default defineConfig({
+  plugins: [
+    devtools(),
+    tanstackRouter({
+      target: "react",
+      autoCodeSplitting: true,
+      routeToken: "_layout",
+      enableRouteGeneration: true,
+      generatedRouteTree: "src/routeTree.gen.ts",
+    }),
+    viteReact(),
+    tailwindcss(),
+  ],
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
+});
