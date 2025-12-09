@@ -6,7 +6,7 @@ export function Header() {
     const { toggleSidebar } = useSidebar();
 
     return (
-        <header className="w-full h-16 bg-white flex items-center justify-between border-b border-muted-foreground/20 fixed px-4">
+        <header className="w-full z-[1000] h-16 bg-white/80 flex items-center justify-between border-b border-muted-foreground/20 fixed px-4">
             <div>
                 <Button
                     size="icon"

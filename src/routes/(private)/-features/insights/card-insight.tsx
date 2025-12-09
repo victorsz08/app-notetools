@@ -24,7 +24,7 @@ export function CardInsight({
     return (
         <Card {...props} className="bg-primary w-full gap-5">
             <CardHeader>
-                <CardTitle className="text-base font-normal text-background">
+                <CardTitle className="text-sm font-normal text-background">
                     {title}
                 </CardTitle>
                 <CardAction>

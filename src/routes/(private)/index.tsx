@@ -5,6 +5,8 @@ import { fetchInsights } from "@/infra/insights/fetch-insights";
 import { startOfMonth } from "date-fns";
 import { ChartBarSales } from "./-features/insights/bar-chart-sales";
 import { fecthSalesOnDay } from "@/infra/insights/fetch-sales-on-day";
+import { fecthContracts } from "@/infra/contracts/fecth-contracts";
+import { ContractsOnDay } from "./-features/contracts/contracts-on-day";
 
 const startDate = startOfMonth(new Date());
 const endDate = new Date();
@@ -16,6 +18,17 @@ const getInsights = queryOptions({
             dateFrom: startDate,
             dateTo: endDate,
         }),
+    staleTime: 30_000,
+});
+
+const getContractsOnDay = queryOptions({
+    queryKey: ["get-contracts"],
+    queryFn: async () =>
+        fecthContracts({
+            page: 1,
+            limit: 100,
+        }),
+    staleTime: 30_000,
 });
 
 const getSalesOnDay = queryOptions({
@@ -25,15 +38,20 @@ const getSalesOnDay = queryOptions({
             dateFrom: startDate,
             dateTo: endDate,
         }),
+    staleTime: 30_000,
 });
 
 export const Route = createFileRoute("/(private)/")({
+    head: () => ({
+        meta: [{ title: "Dashboard | Notetools" }],
+    }),
     component: Dashboard,
 });
 
 function Dashboard() {
     const { data: insights } = useSuspenseQuery(getInsights);
     const { data: salesOnDay } = useSuspenseQuery(getSalesOnDay);
+    const { data: contracts } = useSuspenseQuery(getContractsOnDay);
 
     return (
         <main className="p-6 w-full">
@@ -48,6 +66,7 @@ function Dashboard() {
             <div className="space-y-4">
                 <Insights data={insights} />
                 <ChartBarSales data={salesOnDay.sales} />
+                <ContractsOnDay data={contracts.contracts} />
             </div>
         </main>
     );

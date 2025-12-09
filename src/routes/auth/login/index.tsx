@@ -26,6 +26,9 @@ export const Route = createFileRoute("/auth/login/")({
 
         return <Login />;
     },
+    head: () => ({
+        meta: [{ title: "Login | Notetools" }],
+    }),
 });
 
 function Login() {
