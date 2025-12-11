@@ -36,9 +36,7 @@ function Layout() {
             <AppSidebar variant="sidebar" collapsible="icon" />
             <main className="w-full bg-background">
                 <Header />
-                <section className="pt-16">
-                    <Outlet />
-                </section>
+                <Outlet />
             </main>
         </SidebarProvider>
     );
