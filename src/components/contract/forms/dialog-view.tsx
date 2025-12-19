@@ -23,8 +23,8 @@ interface DialogViewContractProps {
 export function DialogViewContract({ contract }: DialogViewContractProps) {
     return (
         <Dialog modal>
-            <DialogTrigger>
-                <div className="flex items-center gap-1 text-sm p-2">
+            <DialogTrigger asChild>
+                <div className="flex w-38 items-center text-foreground cursor-pointer hover:bg-muted gap-1 text-sm p-2">
                     <Eye className="w-4 h-4" />
                     <p>Visualizar</p>
                 </div>
