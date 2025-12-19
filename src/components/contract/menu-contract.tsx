@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import { Ellipsis } from "lucide-react";
 import { DialogViewContract } from "./forms/dialog-view";
 import { UpdateStatusDialog } from "./forms/dialog-update-status";
+import { UpdateSchedulingDialog } from "./forms/dialog-update-scheduling";
 
 interface MenuContractProps {
     contract: Contract;
@@ -28,6 +29,9 @@ export function MenuContract({ contract }: MenuContractProps) {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                     <UpdateStatusDialog contract={contract} />
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <UpdateSchedulingDialog contract={contract} />
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

@@ -11,7 +11,7 @@ import { CopyButton } from "@/components/buttons/copy-button";
 import { BadgeStatus } from "@/components/contract/badge-status";
 import { BadgeType } from "@/components/contract/badge-type";
 import { formatCurrency } from "@/lib/utils";
-import { format } from "date-fns";
+import { addHours, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { MenuContract } from "@/components/contract/menu-contract";
 
@@ -21,7 +21,10 @@ interface TableContractsOnDay {
 
 export function TableContractsOnDay({ data }: TableContractsOnDay) {
     function transformDate(date: Date) {
-        const dateString = format(date, "EEEE, dd 'de' MMMM", { locale: ptBR });
+        const dateFormated = addHours(date, 3);
+        const dateString = format(dateFormated, "EEEE, dd 'de' MMMM", {
+            locale: ptBR,
+        });
 
         return dateString.charAt(0).toUpperCase() + dateString.slice(1);
     }
