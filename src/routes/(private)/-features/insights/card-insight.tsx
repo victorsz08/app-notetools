@@ -2,21 +2,25 @@ import {
     Card,
     CardAction,
     CardContent,
+    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import type { LucideIcon } from "lucide-react";
+import { formatPercent } from "@/lib/utils";
+import { TrendingDown, TrendingUp, type LucideIcon } from "lucide-react";
 
 export interface CardInsightProps {
     children: React.ReactNode;
     title: string;
     icon: LucideIcon;
+    trending: number;
 }
 
 export function CardInsight({
     children,
     title,
     icon,
+    trending,
     ...props
 }: CardInsightProps & React.ComponentProps<typeof Card>) {
     let Icon = icon;
@@ -36,6 +40,19 @@ export function CardInsight({
             <CardContent>
                 <p className="text-2xl font-bold text-background">{children}</p>
             </CardContent>
+            <CardFooter>
+                <p className="text-xs text-background/70 font-light flex items-center gap-2">
+                    {trending > 0 ? (
+                        <TrendingUp className="w-3 h-3 text-white" />
+                    ) : (
+                        <TrendingDown className="w-3 h-3 text-white" />
+                    )}
+                    <strong className="font-medium text-white">
+                        {formatPercent(trending)}
+                    </strong>
+                    em relação ao mês anterior.
+                </p>
+            </CardFooter>
         </Card>
     );
 }

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Insights } from "./-features/insights/insights";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { fetchInsights } from "@/infra/insights/fetch-insights";
@@ -7,6 +7,8 @@ import { ChartBarSales } from "./-features/insights/bar-chart-sales";
 import { fecthSalesOnDay } from "@/infra/insights/fetch-sales-on-day";
 import { fecthContracts } from "@/infra/contracts/fecth-contracts";
 import { ContractsOnDay } from "./-features/contracts/contracts-on-day";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 const startDate = startOfMonth(new Date());
 const endDate = new Date();
@@ -55,13 +57,21 @@ function Dashboard() {
 
     return (
         <main className="p-6 w-full">
-            <div className="mb-6 -space-y-2">
-                <h1 className="text-3xl font-bold text-foreground">
-                    Dashboard
-                </h1>
-                <small className="text-xs font-light text-muted-foreground">
-                    Acompanhe suas vendas e instalações em tempo real
-                </small>
+            <div className="mb-6 w-full flex justify-between items-center">
+                <div className="-space-y-2">
+                    <h1 className="text-3xl font-bold text-foreground">
+                        Dashboard
+                    </h1>
+                    <small className="text-xs font-light text-muted-foreground">
+                        Acompanhe suas vendas e instalações em tempo real
+                    </small>
+                </div>
+                <Link to="/contratos/novo">
+                    <Button type="button">
+                        Novo contrato
+                        <Plus />
+                    </Button>
+                </Link>
             </div>
             <div className="space-y-4">
                 <Insights data={insights} />

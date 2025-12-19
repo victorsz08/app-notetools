@@ -31,6 +31,9 @@ export interface Insights {
     revenue: number;
     sales: number;
     completionRate: number;
+    trendingSales: number;
+    trendingRevenue: number;
+    trendingCompletionRate: number;
 }
 
 export interface SalesOnDay {
@@ -38,4 +41,13 @@ export interface SalesOnDay {
         quantity: number;
         day: Date;
     }>;
+}
+
+export type FieldError<T extends string = string> = {
+    path: T;
+    message: string;
+};
+
+export interface BadRequestError<T extends string = string> {
+    errors: Array<FieldError<T>>;
 }

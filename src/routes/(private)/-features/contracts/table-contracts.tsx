@@ -13,7 +13,7 @@ import { BadgeType } from "@/components/contract/badge-type";
 import { formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Ellipsis } from "lucide-react";
+import { MenuContract } from "@/components/contract/menu-contract";
 
 interface TableContractsOnDay {
     data: Array<Contract>;
@@ -51,7 +51,7 @@ export function TableContractsOnDay({ data }: TableContractsOnDay) {
                     <TableHead className="text-muted-foreground">
                         Contato
                     </TableHead>
-                    <TableHead className="text-muted-foreground">
+                    <TableHead className="text-muted-foreground w-20 text-center">
                         Ações
                     </TableHead>
                 </TableRow>
@@ -60,8 +60,10 @@ export function TableContractsOnDay({ data }: TableContractsOnDay) {
                 {data.map((item) => (
                     <TableRow key={item.id} className="font-light text-xs">
                         <TableCell>
-                            <CopyButton value={String(item.number)} />
-                            {item.number}
+                            <div className="flex items-center gap-1">
+                                <CopyButton value={String(item.number)} />
+                                <p className="text-primary">{item.number}</p>
+                            </div>
                         </TableCell>
                         <TableCell>{item.local}</TableCell>
                         <TableCell>
@@ -78,11 +80,13 @@ export function TableContractsOnDay({ data }: TableContractsOnDay) {
                         </TableCell>
                         <TableCell>{formatCurrency(item.price)}</TableCell>
                         <TableCell>
-                            <CopyButton value={item.contact} />
-                            {item.contact}
+                            <div className="flex items-center gap-1">
+                                <CopyButton value={item.contact} />
+                                <p>{item.contact}</p>
+                            </div>
                         </TableCell>
-                        <TableCell>
-                            <Ellipsis />
+                        <TableCell className="w-20 flex justify-center items-center">
+                            <MenuContract contract={item} />
                         </TableCell>
                     </TableRow>
                 ))}

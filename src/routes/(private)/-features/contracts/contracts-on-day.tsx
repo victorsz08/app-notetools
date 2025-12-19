@@ -37,7 +37,7 @@ export function ContractsOnDay({ data }: { data: Array<Contract> }) {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <span className="text-xs mb-4 font-light text-muted-foreground">
+                        <span className="text-xs mb-8 font-light text-muted-foreground">
                             Total de {data.length} contrato
                             {data.length > 1 ? "s" : ""}
                         </span>
