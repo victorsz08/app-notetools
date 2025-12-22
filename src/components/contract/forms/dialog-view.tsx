@@ -50,14 +50,14 @@ export function DialogViewContract({ contract }: DialogViewContractProps) {
                     <StrepView>
                         <StrepViewTitle>Agendamento</StrepViewTitle>
                         <StrepViewContent>
-                            <div className="flex items-center gap-1">
+                            <div className="flex flex-col items-start gap-1">
                                 <p>
                                     {formatDateDescription(
                                         contract.schedulingDate,
                                     )}
                                 </p>
                                 <p className="text-muted-foreground font-normal">
-                                    - {contract.schedulingTime}
+                                    {contract.schedulingTime}
                                 </p>
                             </div>
                         </StrepViewContent>
@@ -73,9 +73,11 @@ export function DialogViewContract({ contract }: DialogViewContractProps) {
                         </StrepViewContent>
                     </StrepView>
                     <StrepView>
-                        <StrepViewTitle>Observação</StrepViewTitle>
+                        <StrepViewTitle>Observações</StrepViewTitle>
                         <StrepViewContent>
-                            {contract.observation}
+                            <div className="truncate max-w-130">
+                                {contract.observation}
+                            </div>
                         </StrepViewContent>
                     </StrepView>
                 </div>

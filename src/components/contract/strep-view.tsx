@@ -17,5 +17,9 @@ export function StrepViewTitle({ children }: StrepViewProps) {
 }
 
 export function StrepViewContent({ children }: StrepViewProps) {
-    return <p className="text-sm font-semibold text-foreground">{children}</p>;
+    return (
+        <p className="text-sm truncate font-semibold text-foreground">
+            {children}
+        </p>
+    );
 }
