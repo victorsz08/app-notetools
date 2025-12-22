@@ -11,6 +11,7 @@ import { DialogViewContract } from "./forms/dialog-view";
 import { UpdateStatusDialog } from "./forms/dialog-update-status";
 import { UpdateSchedulingDialog } from "./forms/dialog-update-scheduling";
 import { UpdateContractDialog } from "./forms/update-contract-dialog";
+import { DeleteContractDialog } from "./forms/delete-contract-dialog";
 
 interface MenuContractProps {
     contract: Contract;
@@ -36,6 +37,9 @@ export function MenuContract({ contract }: MenuContractProps) {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                     <UpdateContractDialog contract={contract} />
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <DeleteContractDialog contract={contract} />
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
