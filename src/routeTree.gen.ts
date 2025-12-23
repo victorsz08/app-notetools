@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as privateLayoutRouteImport } from './routes/(private)/_layout'
 import { Route as privateIndexRouteImport } from './routes/(private)/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
+import { Route as privateContratosIndexRouteImport } from './routes/(private)/contratos/index'
 import { Route as privateContratosNovoIndexRouteImport } from './routes/(private)/contratos/novo/index'
 
 const privateLayoutRoute = privateLayoutRouteImport.update({
@@ -28,6 +29,11 @@ const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
   path: '/auth/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const privateContratosIndexRoute = privateContratosIndexRouteImport.update({
+  id: '/contratos/',
+  path: '/contratos/',
+  getParentRoute: () => privateLayoutRoute,
+} as any)
 const privateContratosNovoIndexRoute =
   privateContratosNovoIndexRouteImport.update({
     id: '/contratos/novo/',
@@ -37,11 +43,13 @@ const privateContratosNovoIndexRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof privateIndexRoute
+  '/contratos': typeof privateContratosIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/contratos/novo': typeof privateContratosNovoIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof privateIndexRoute
+  '/contratos': typeof privateContratosIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/contratos/novo': typeof privateContratosNovoIndexRoute
 }
@@ -49,18 +57,20 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(private)': typeof privateLayoutRouteWithChildren
   '/(private)/': typeof privateIndexRoute
+  '/(private)/contratos/': typeof privateContratosIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/(private)/contratos/novo/': typeof privateContratosNovoIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth/login' | '/contratos/novo'
+  fullPaths: '/' | '/contratos' | '/auth/login' | '/contratos/novo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth/login' | '/contratos/novo'
+  to: '/' | '/contratos' | '/auth/login' | '/contratos/novo'
   id:
     | '__root__'
     | '/(private)'
     | '/(private)/'
+    | '/(private)/contratos/'
     | '/auth/login/'
     | '/(private)/contratos/novo/'
   fileRoutesById: FileRoutesById
@@ -93,6 +103,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(private)/contratos/': {
+      id: '/(private)/contratos/'
+      path: '/contratos'
+      fullPath: '/contratos'
+      preLoaderRoute: typeof privateContratosIndexRouteImport
+      parentRoute: typeof privateLayoutRoute
+    }
     '/(private)/contratos/novo/': {
       id: '/(private)/contratos/novo/'
       path: '/contratos/novo'
@@ -105,11 +122,13 @@ declare module '@tanstack/react-router' {
 
 interface privateLayoutRouteChildren {
   privateIndexRoute: typeof privateIndexRoute
+  privateContratosIndexRoute: typeof privateContratosIndexRoute
   privateContratosNovoIndexRoute: typeof privateContratosNovoIndexRoute
 }
 
 const privateLayoutRouteChildren: privateLayoutRouteChildren = {
   privateIndexRoute: privateIndexRoute,
+  privateContratosIndexRoute: privateContratosIndexRoute,
   privateContratosNovoIndexRoute: privateContratosNovoIndexRoute,
 }
 

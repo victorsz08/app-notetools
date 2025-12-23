@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Insights } from "./-features/insights/insights";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { fetchInsights } from "@/infra/insights/fetch-insights";
-import { startOfMonth } from "date-fns";
+import { endOfDay, startOfDay, startOfMonth, subHours } from "date-fns";
 import { ChartBarSales } from "./-features/insights/bar-chart-sales";
 import { fecthSalesOnDay } from "@/infra/insights/fetch-sales-on-day";
 import { fecthContracts } from "@/infra/contracts/fecth-contracts";
@@ -25,11 +25,19 @@ const getInsights = queryOptions({
 
 const getContractsOnDay = queryOptions({
     queryKey: ["get-contracts"],
-    queryFn: async () =>
-        fecthContracts({
+    queryFn: async () => {
+        const startDate = subHours(startOfDay(new Date()), 3);
+        const endDate = subHours(endOfDay(new Date()), 3);
+
+        const data = await fecthContracts({
             page: 1,
             limit: 100,
-        }),
+            schedulingFrom: startDate,
+            schedulingTo: endDate,
+        });
+
+        return data;
+    },
     staleTime: 30_000,
 });
 

@@ -1,0 +1,88 @@
+import {
+    ContractFilter,
+    type ContractFilters,
+} from "@/components/contract/table/contract-filter";
+import { TableContracts } from "@/components/contract/table/table-contracts";
+import { fecthContracts } from "@/infra/contracts/fecth-contracts";
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
+import { startOfDay, subHours } from "date-fns";
+import { useState } from "react";
+
+export const Route = createFileRoute("/(private)/contratos/")({
+    component: ContractsPage,
+    head: () => ({
+        meta: [{ title: "Meus contratos | Notetools" }],
+    }),
+});
+
+function ContractsPage() {
+    const [page, setPage] = useState<number>(1);
+    const [filters, setFilters] = useState<ContractFilters>({
+        createdDateRange: undefined,
+        schedulingDateRange: undefined,
+        status: undefined,
+        typeContract: undefined,
+    });
+
+    const { data } = useQuery({
+        queryKey: ["get-contracts", page, filters],
+        queryFn: () =>
+            fecthContracts({
+                page,
+                limit: 10,
+                createdFrom:
+                    filters.createdDateRange?.from &&
+                    subHours(startOfDay(filters.createdDateRange.from), 3),
+                createdTo:
+                    filters.createdDateRange?.to &&
+                    subHours(startOfDay(filters.createdDateRange.to), 3),
+                schedulingFrom:
+                    filters.schedulingDateRange?.from &&
+                    subHours(startOfDay(filters.schedulingDateRange.from), 3),
+                schedulingTo:
+                    filters.schedulingDateRange?.to &&
+                    subHours(startOfDay(filters.schedulingDateRange.to), 3),
+                status: filters.status || undefined,
+                type: filters.typeContract || undefined,
+            }),
+    });
+
+    return (
+        <main className="p-6 w-full">
+            <div className="mb-6 w-full flex justify-between items-center">
+                <div className="-space-y-2">
+                    <h1 className="text-3xl font-bold text-foreground">
+                        Meus contratos
+                    </h1>
+                    <small className="text-xs font-light text-muted-foreground">
+                        Gerencie seus contratos aqui.
+                    </small>
+                </div>
+            </div>
+            <div className="mt-8 space-y-4 w-full">
+                <ContractFilter
+                    value={filters}
+                    onChange={setFilters}
+                    onReset={() =>
+                        setFilters({
+                            createdDateRange: undefined,
+                            schedulingDateRange: undefined,
+                            status: "",
+                            typeContract: "",
+                        })
+                    }
+                />
+                {data && (
+                    <TableContracts
+                        data={data.contracts}
+                        page={page}
+                        totalPages={data.totalPages}
+                        total={data.total}
+                        onPageChange={setPage}
+                    />
+                )}
+            </div>
+        </main>
+    );
+}

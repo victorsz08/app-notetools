@@ -37,7 +37,7 @@ export function MenuItems({ items }: { items: Array<MenuItemProps> }) {
                                             item.href === location.pathname
                                         }
                                         onClick={item.onClick}
-                                        className="h-12 data-[active=true]:text-primary"
+                                        className="h-12 text-muted-foreground/70 data-[active=true]:text-primary"
                                     >
                                         <item.icon />
                                         <p>{item.label}</p>
@@ -51,7 +51,7 @@ export function MenuItems({ items }: { items: Array<MenuItemProps> }) {
                                             isActive={
                                                 item.href === location.pathname
                                             }
-                                            className="h-12 data-[active=true]:text-primary"
+                                            className="h-12 text-muted-foreground/70 data-[active=true]:text-primary"
                                         >
                                             <item.icon />
                                             <p>{item.label}</p>
