@@ -15,7 +15,11 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { formatCurrency, formatDateDescription } from "@/lib/utils";
+import {
+    formatCurrency,
+    formatDateDescription,
+    formatPhonePattern,
+} from "@/lib/utils";
 import type { Contract } from "@/types";
 import { BadgeStatus } from "../badge-status";
 import { BadgeType } from "../badge-type";
@@ -83,7 +87,7 @@ export function TableContracts({
             <CardContent>
                 <Table>
                     <TableHeader>
-                        <TableRow>
+                        <TableRow className="bg-muted text-foreground/80">
                             <TableHead>N° do contrato</TableHead>
                             <TableHead>Cidade/UF</TableHead>
                             <TableHead>Agendamento</TableHead>
@@ -97,7 +101,7 @@ export function TableContracts({
                     <TableBody>
                         {data.length > 0 ? (
                             data.map((contract) => (
-                                <TableRow key={contract.id}>
+                                <TableRow key={contract.id} className="text-xs">
                                     <TableCell>
                                         <div className="flex items-center gap-1">
                                             <CopyButton
@@ -127,7 +131,9 @@ export function TableContracts({
                                     <TableCell>
                                         <BadgeType variant={contract.type} />
                                     </TableCell>
-                                    <TableCell>{contract.contact}</TableCell>
+                                    <TableCell>
+                                        {formatPhonePattern(contract.contact)}
+                                    </TableCell>
                                     <TableCell>
                                         {formatCurrency(contract.price)}
                                     </TableCell>

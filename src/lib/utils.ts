@@ -30,3 +30,15 @@ export function formatDateDescription(date: Date) {
         dateString.charAt(0).toUpperCase() + dateString.slice(1);
     return dateDescription;
 }
+
+export function formatPhonePattern(number: string) {
+    const numberFormatted = number.replace(/\D/g, "");
+
+    if (numberFormatted.length === 11) {
+        return numberFormatted.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    }
+
+    if (numberFormatted.length === 10) {
+        return numberFormatted.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3");
+    }
+}
