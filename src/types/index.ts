@@ -51,3 +51,12 @@ export type FieldError<T extends string = string> = {
 export interface BadRequestError<T extends string = string> {
     errors: Array<FieldError<T>>;
 }
+
+
+export interface Note {
+    id: string;
+    title: string;
+    content: string;
+    createdAt: Date;
+    updatedAt: Date;
+}

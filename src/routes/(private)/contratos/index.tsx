@@ -3,10 +3,14 @@ import {
     type ContractFilters,
 } from "@/components/contract/table/contract-filter";
 import { TableContracts } from "@/components/contract/table/table-contracts";
+import { Button } from "@/components/ui/button";
+import { Card, CardAction, CardContent, CardHeader } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { fecthContracts } from "@/infra/contracts/fecth-contracts";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { startOfDay, subHours } from "date-fns";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/(private)/contratos/")({
@@ -73,7 +77,7 @@ function ContractsPage() {
                         })
                     }
                 />
-                {data && (
+                {data ? (
                     <TableContracts
                         data={data.contracts}
                         page={page}
@@ -81,6 +85,30 @@ function ContractsPage() {
                         total={data.total}
                         onPageChange={setPage}
                     />
+                ) : (
+                    <Card>
+                        <CardHeader>
+                            <CardAction>
+                                <Link to="/contratos/novo">
+                                    <Button type="button">
+                                        <Plus/>
+                                        Novo contrato
+                                    </Button>
+                                </Link>
+                            </CardAction>
+                        </CardHeader>
+                        <CardContent>
+                            <Table>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell className="italic text-center">
+                                            Nenhum contrato encontrado
+                                        </TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
                 )}
             </div>
         </main>

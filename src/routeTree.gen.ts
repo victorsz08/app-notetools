@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as privateLayoutRouteImport } from './routes/(private)/_layout'
 import { Route as privateIndexRouteImport } from './routes/(private)/index'
+import { Route as privateNotasLayoutRouteImport } from './routes/(private)/notas/_layout'
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
+import { Route as privateNotasIndexRouteImport } from './routes/(private)/notas/index'
 import { Route as privateContratosIndexRouteImport } from './routes/(private)/contratos/index'
 import { Route as privateContratosNovoIndexRouteImport } from './routes/(private)/contratos/novo/index'
 
@@ -24,10 +26,20 @@ const privateIndexRoute = privateIndexRouteImport.update({
   path: '/',
   getParentRoute: () => privateLayoutRoute,
 } as any)
+const privateNotasLayoutRoute = privateNotasLayoutRouteImport.update({
+  id: '/notas',
+  path: '/notas',
+  getParentRoute: () => privateLayoutRoute,
+} as any)
 const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
   id: '/auth/login/',
   path: '/auth/login/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const privateNotasIndexRoute = privateNotasIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => privateNotasLayoutRoute,
 } as any)
 const privateContratosIndexRoute = privateContratosIndexRouteImport.update({
   id: '/contratos/',
@@ -42,35 +54,48 @@ const privateContratosNovoIndexRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/notas': typeof privateNotasLayoutRouteWithChildren
   '/': typeof privateIndexRoute
   '/contratos': typeof privateContratosIndexRoute
+  '/notas/': typeof privateNotasIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/contratos/novo': typeof privateContratosNovoIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof privateIndexRoute
   '/contratos': typeof privateContratosIndexRoute
+  '/notas': typeof privateNotasIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/contratos/novo': typeof privateContratosNovoIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(private)': typeof privateLayoutRouteWithChildren
+  '/(private)/notas': typeof privateNotasLayoutRouteWithChildren
   '/(private)/': typeof privateIndexRoute
   '/(private)/contratos/': typeof privateContratosIndexRoute
+  '/(private)/notas/': typeof privateNotasIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/(private)/contratos/novo/': typeof privateContratosNovoIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contratos' | '/auth/login' | '/contratos/novo'
+  fullPaths:
+    | '/notas'
+    | '/'
+    | '/contratos'
+    | '/notas/'
+    | '/auth/login'
+    | '/contratos/novo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contratos' | '/auth/login' | '/contratos/novo'
+  to: '/' | '/contratos' | '/notas' | '/auth/login' | '/contratos/novo'
   id:
     | '__root__'
     | '/(private)'
+    | '/(private)/notas'
     | '/(private)/'
     | '/(private)/contratos/'
+    | '/(private)/notas/'
     | '/auth/login/'
     | '/(private)/contratos/novo/'
   fileRoutesById: FileRoutesById
@@ -96,12 +121,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof privateIndexRouteImport
       parentRoute: typeof privateLayoutRoute
     }
+    '/(private)/notas': {
+      id: '/(private)/notas'
+      path: '/notas'
+      fullPath: '/notas'
+      preLoaderRoute: typeof privateNotasLayoutRouteImport
+      parentRoute: typeof privateLayoutRoute
+    }
     '/auth/login/': {
       id: '/auth/login/'
       path: '/auth/login'
       fullPath: '/auth/login'
       preLoaderRoute: typeof AuthLoginIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/(private)/notas/': {
+      id: '/(private)/notas/'
+      path: '/'
+      fullPath: '/notas/'
+      preLoaderRoute: typeof privateNotasIndexRouteImport
+      parentRoute: typeof privateNotasLayoutRoute
     }
     '/(private)/contratos/': {
       id: '/(private)/contratos/'
@@ -120,13 +159,26 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface privateNotasLayoutRouteChildren {
+  privateNotasIndexRoute: typeof privateNotasIndexRoute
+}
+
+const privateNotasLayoutRouteChildren: privateNotasLayoutRouteChildren = {
+  privateNotasIndexRoute: privateNotasIndexRoute,
+}
+
+const privateNotasLayoutRouteWithChildren =
+  privateNotasLayoutRoute._addFileChildren(privateNotasLayoutRouteChildren)
+
 interface privateLayoutRouteChildren {
+  privateNotasLayoutRoute: typeof privateNotasLayoutRouteWithChildren
   privateIndexRoute: typeof privateIndexRoute
   privateContratosIndexRoute: typeof privateContratosIndexRoute
   privateContratosNovoIndexRoute: typeof privateContratosNovoIndexRoute
 }
 
 const privateLayoutRouteChildren: privateLayoutRouteChildren = {
+  privateNotasLayoutRoute: privateNotasLayoutRouteWithChildren,
   privateIndexRoute: privateIndexRoute,
   privateContratosIndexRoute: privateContratosIndexRoute,
   privateContratosNovoIndexRoute: privateContratosNovoIndexRoute,
