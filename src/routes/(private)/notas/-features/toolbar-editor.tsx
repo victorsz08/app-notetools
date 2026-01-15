@@ -10,7 +10,7 @@ export function EditorToolbar({ editor }: Props) {
     if (!editor) return null;
 
     return (
-        <div className="flex gap-1 bg-card">
+        <div className="flex gap-1 bg-muted border-t border-b border-muted-foreground/20 py-2">
             <Button
                 size="icon-sm"
                 variant={editor.isActive("bold") ? "default" : "ghost"}

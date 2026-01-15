@@ -5,8 +5,9 @@ import { TextEditor } from "./-features/editor";
 import { useDebounce } from "use-debounce";
 import { useEffect, useState } from "react";
 import { updateNote } from "@/infra/notes/update";
-import { format, formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { Clock, Notebook } from "lucide-react";
 
 export const Route = createFileRoute("/(private)/notas/")({
     head: () => ({
@@ -46,7 +47,7 @@ function NotesPage() {
     }, [note?.id]);
 
     useEffect(() => {
-        if (!note) return;
+        if (!note || !content) return;
 
         if (debouncedContent !== note.content) {
             update({
@@ -58,7 +59,7 @@ function NotesPage() {
     }, [debouncedTitle]);
 
     useEffect(() => {
-        if (!note) return;
+        if (!note || !content) return;
 
         if (debouncedContent !== note.content) {
             update({
@@ -70,28 +71,47 @@ function NotesPage() {
     }, [debouncedContent]);
 
     if (!id) {
-        return <p>Selecione uma nota</p>;
+        return (
+            <div className="grid justify-center items-center h-screen w-full">
+                <div className="flex flex-col gap-1 items-center">
+                    <Notebook className="text-foreground/80 w-8 h-8" />
+                    <p className="text-sm font-light text-foreground/80">
+                        Selecione uma nota
+                    </p>
+                </div>
+            </div>
+        );
     }
 
     if (!note) {
-        return <p>Selecione uma nota</p>;
+        return (
+            <div className="grid justify-center items-center h-screen w-full">
+                <div className="flex flex-col gap-1 items-center">
+                    <Notebook className="text-foreground/80 w-8 h-8" />
+                    <p className="text-sm font-light text-foreground/80">
+                        Selecione uma nota
+                    </p>
+                </div>
+            </div>
+        );
     }
 
     return (
         <main className="w-full h-screen bg-card">
-            <div className="p-2 flex items-center justify-between w-full">
-                <div>
-                    <p className="text-[.6rem] font-bold text-foreground">
+            <div className="flex items-center justify-between w-full">
+                <div className="p-2">
+                    <p className="text-[.6rem] font-bold text-muted-foreground">
                         Título:
                     </p>
                     <input
-                        className="text-sm min-w-100 outline-0 font-light text-muted-foreground border-none bg-card"
+                        className="text-base min-w-100 outline-0 font-medium text-foreground border-none bg-card"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
                 </div>
-                <div className="max-w-fit">
-                    <p className="text-[.7rem] font-light text-muted-foreground italic">
+                <div className="max-w-fit pr-3">
+                    <p className="text-[.7rem] font-light flex items-center text-muted-foreground">
+                        <Clock className="text-muted-foreground w-4 h-4 mr-1" />
                         Atualizado{" "}
                         {formatDistanceToNow(note.updatedAt, {
                             locale: ptBR,
@@ -100,7 +120,11 @@ function NotesPage() {
                     </p>
                 </div>
             </div>
-            <TextEditor key={note.id} content={content} onChange={setContent} />
+            <TextEditor
+                key={note.id}
+                content={note.content}
+                onChange={setContent}
+            />
         </main>
     );
 }

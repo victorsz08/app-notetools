@@ -19,9 +19,12 @@ export function TextEditor({ content, onChange }: EditorProps) {
     if (!editor) return null;
 
     return (
-        <div className="rounded-md p-3 bg-card h-[80vh]">
+        <div className="rounded-md bg-card h-[80vh]">
             <EditorToolbar editor={editor} />
-            <EditorContent editor={editor} className="flex-1 overflow-y-auto" />
+            <EditorContent
+                editor={editor}
+                className="flex-1 p-3 overflow-y-auto"
+            />
         </div>
     );
 }

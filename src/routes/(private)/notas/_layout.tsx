@@ -25,7 +25,7 @@ function LayoutNote() {
     const { data } = useSuspenseQuery(getNotes);
 
     return (
-        <main className="flex gap-1">
+        <main className="flex">
             <SidebarNotes items={data.notes} />
             <Outlet />
         </main>
