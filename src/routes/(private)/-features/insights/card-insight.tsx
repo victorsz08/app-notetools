@@ -48,7 +48,7 @@ export function CardInsight({
                         <TrendingDown className="w-3 h-3 text-white" />
                     )}
                     <strong className="font-medium text-white">
-                        {formatPercent(trending || 0)}
+                        {formatPercent(trending)}
                     </strong>
                     em relação ao mês anterior.
                 </p>

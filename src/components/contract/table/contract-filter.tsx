@@ -1,8 +1,8 @@
 import {
     Card,
+    CardAction,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -81,6 +81,13 @@ export function ContractFilter({ value, onChange, onReset }: FiltersProps) {
                         </CardDescription>
                     </div>
                 </div>
+                <CardAction>
+                    {onReset && (
+                        <Button variant="secondary" onClick={onReset}>
+                            Limpar filtros
+                        </Button>
+                    )}
+                </CardAction>
             </CardHeader>
             <CardContent>
                 <div className="flex items-center gap-2">
@@ -164,13 +171,6 @@ export function ContractFilter({ value, onChange, onReset }: FiltersProps) {
                     </div>
                 </div>
             </CardContent>
-            <CardFooter className="flex justify-end">
-                {onReset && (
-                    <Button variant="secondary" onClick={onReset}>
-                        Limpar filtros
-                    </Button>
-                )}
-            </CardFooter>
         </Card>
     );
 }

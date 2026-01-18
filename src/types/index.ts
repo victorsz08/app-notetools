@@ -52,7 +52,6 @@ export interface BadRequestError<T extends string = string> {
     errors: Array<FieldError<T>>;
 }
 
-
 export interface Note {
     id: string;
     title: string;

@@ -28,6 +28,7 @@ export function Insights({ data }: { data: Insights }) {
         <section className="w-full flex items-center gap-4">
             {insightsItems.map((item) => (
                 <CardInsight
+                    key={item.title}
                     title={item.title}
                     icon={item.icon}
                     trending={item.trending}

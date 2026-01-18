@@ -20,12 +20,13 @@ export function formatPercent(percent: number) {
     return new Intl.NumberFormat("pt-BR", {
         style: "percent",
         maximumFractionDigits: 0,
-        minimumFractionDigits: 0,
     }).format(percent);
 }
 
 export function formatDateDescription(date: Date) {
-    const dateString = format(date, "EEEE, dd 'de' MMMM", { locale: ptBR });
+    const dateString = format(date, "EEEE, dd 'de' MMMM, yyyy", {
+        locale: ptBR,
+    });
     const dateDescription =
         dateString.charAt(0).toUpperCase() + dateString.slice(1);
     return dateDescription;

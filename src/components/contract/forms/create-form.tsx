@@ -22,6 +22,7 @@ import { createContract } from "@/infra/contracts/create-contract";
 import type { BadRequestError, TypeContract } from "@/types";
 import { toast } from "sonner";
 import { useRouter } from "@tanstack/react-router";
+import { addHours } from "date-fns";
 
 const createContractSchema = z.object({
     number: z.string().min(1, "Campo número do contrato é obrigatório"),
@@ -99,7 +100,7 @@ export function CreateContractForm() {
                 local,
                 observation,
                 price: Number(price.replace("R$", "").replace(",", ".")),
-                schedulingDate,
+                schedulingDate: addHours(schedulingDate, 3),
                 schedulingTime,
                 type: type as TypeContract,
             });
@@ -109,7 +110,7 @@ export function CreateContractForm() {
         onSuccess: () => {
             toast.success("Contrato criado com sucesso!");
             queryClient.invalidateQueries({
-                queryKey: ["contracts", "insights"],
+                queryKey: ["get-contracts"],
             });
             router.navigate({ to: "/" });
         },

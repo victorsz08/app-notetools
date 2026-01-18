@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import type { BadRequestError, Contract } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addHours } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarCog } from "lucide-react";
 import { useState } from "react";
@@ -60,13 +61,15 @@ export function UpdateSchedulingDialog({
         mutationFn: async (data: UpdateSchedulingForm) => {
             await updateSchedulingContract({
                 id: contract.id,
-                schedulingDate: new Date(data.schedulingDate),
+                schedulingDate: addHours(new Date(data.schedulingDate), 3),
                 schedulingTime: data.schedulingTime,
             });
         },
         onSuccess: () => {
             toast.success("Agendamento atualizado com sucesso.");
-            client.invalidateQueries({ queryKey: ["get-contracts"] });
+            client.invalidateQueries({
+                queryKey: ["get-contracts"],
+            });
             setOpen(false);
         },
         onError: (error: BadRequestError<keyof UpdateSchedulingForm>) => {

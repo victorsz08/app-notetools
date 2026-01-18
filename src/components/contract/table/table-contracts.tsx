@@ -33,6 +33,21 @@ import {
     Plus,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteContract } from "@/infra/contracts/delete-contract";
 
 interface TableContractsProps {
     data: Array<Contract>;
@@ -40,6 +55,8 @@ interface TableContractsProps {
     totalPages: number;
     total: number;
     onPageChange: (page: number) => void;
+    contractsSelected: Array<string>;
+    onChangeContractsSelected: (ids: Array<string>) => void;
 }
 
 export function TableContracts({
@@ -48,7 +65,31 @@ export function TableContracts({
     page,
     total,
     totalPages,
+    contractsSelected,
+    onChangeContractsSelected,
 }: TableContractsProps) {
+    const [open, setOpen] = useState<boolean>(false);
+    const client = useQueryClient();
+
+    const { mutate: deleteAll, isPending } = useMutation({
+        mutationKey: ["delete-all-contracts"],
+        mutationFn: async () => {
+            for (const contract of contractsSelected) {
+                await deleteContract({ id: contract });
+            }
+
+            return;
+        },
+        onSuccess: () => {
+            setOpen(false);
+            client.invalidateQueries({ queryKey: ["get-contracts"] });
+            onChangeContractsSelected([]);
+        },
+    });
+
+    const allSelected =
+        data.length > 0 && contractsSelected.length === data.length;
+
     function nextPage() {
         if (page < totalPages) {
             onPageChange(page + 1);
@@ -75,25 +116,77 @@ export function TableContracts({
                 <CardDescription className="text-xs">
                     Total: {total} item{total > 1 ? "s" : ""}
                 </CardDescription>
-                <CardAction>
+                <CardAction className="flex items-center gap-1">
                     <Link to="/contratos/novo">
                         <Button>
                             <Plus className="w-3 h-3" />
                             Novo contrato
                         </Button>
                     </Link>
+                    {contractsSelected.length > 0 && (
+                        <Dialog open={open} onOpenChange={setOpen}>
+                            <DialogTrigger asChild>
+                                <Button variant="destructive">
+                                    <p>{contractsSelected.length}</p>
+                                    Excluir selecionados
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader className="text-center">
+                                    <DialogTitle className="text-foreground text-sm">
+                                        Confirmar exclusão
+                                    </DialogTitle>
+                                    <DialogDescription className="text-xs font-light text-muted-foreground">
+                                        Você deseja excluir{" "}
+                                        {contractsSelected.length} selecionados?
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <div className="flex items-center gap-2 mt-8 justify-center">
+                                    <Button
+                                        onClick={() => deleteAll()}
+                                        variant="secondary"
+                                        disabled={isPending}
+                                    >
+                                        {isPending
+                                            ? "Excluindo..."
+                                            : "Confirmar"}
+                                    </Button>
+                                    <DialogClose asChild>
+                                        <Button variant="destructive">
+                                            Cancelar
+                                        </Button>
+                                    </DialogClose>
+                                </div>
+                            </DialogContent>
+                        </Dialog>
+                    )}
                 </CardAction>
             </CardHeader>
             <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-muted text-foreground/80">
+                            <TableHead>
+                                <Checkbox
+                                    checked={allSelected}
+                                    onCheckedChange={(checked) => {
+                                        if (checked) {
+                                            onChangeContractsSelected(
+                                                data.map((c) => c.id),
+                                            );
+                                        } else {
+                                            onChangeContractsSelected([]);
+                                        }
+                                    }}
+                                />
+                            </TableHead>
                             <TableHead>N° do contrato</TableHead>
                             <TableHead>Cidade/UF</TableHead>
                             <TableHead>Agendamento</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Tipo</TableHead>
                             <TableHead>Telefone</TableHead>
+                            <TableHead>Criado</TableHead>
                             <TableHead>Valor</TableHead>
                             <TableHead>Ações</TableHead>
                         </TableRow>
@@ -102,6 +195,29 @@ export function TableContracts({
                         {data.length > 0 ? (
                             data.map((contract) => (
                                 <TableRow key={contract.id} className="text-xs">
+                                    <TableCell>
+                                        <Checkbox
+                                            checked={contractsSelected.includes(
+                                                contract.id,
+                                            )}
+                                            onCheckedChange={(checked) => {
+                                                if (checked) {
+                                                    onChangeContractsSelected([
+                                                        ...contractsSelected,
+                                                        contract.id,
+                                                    ]);
+                                                } else {
+                                                    onChangeContractsSelected(
+                                                        contractsSelected.filter(
+                                                            (id) =>
+                                                                id !==
+                                                                contract.id,
+                                                        ),
+                                                    );
+                                                }
+                                            }}
+                                        />
+                                    </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-1">
                                             <CopyButton
@@ -133,6 +249,13 @@ export function TableContracts({
                                     </TableCell>
                                     <TableCell>
                                         {formatPhonePattern(contract.contact)}
+                                    </TableCell>
+                                    <TableCell>
+                                        {format(
+                                            contract.createdAt,
+                                            "dd/MM/yyyy",
+                                            { locale: ptBR },
+                                        )}
                                     </TableCell>
                                     <TableCell>
                                         {formatCurrency(contract.price)}

@@ -10,7 +10,7 @@ import {
 } from "../../ui/alert-dialog";
 import { Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { deleteContract } from "@/infra/contracts/delete-contract";
 import { toast } from "sonner";
@@ -21,18 +21,21 @@ interface DeleteContractDialogProps {
 
 export function DeleteContractDialog({ contract }: DeleteContractDialogProps) {
     const [open, setOpen] = useState<boolean>(false);
+    const client = useQueryClient();
 
     const { mutate, isPending } = useMutation({
         mutationKey: ["delete-contract", contract.id],
         mutationFn: async () => deleteContract({ id: contract.id }),
         onSuccess: () => {
             toast.success("Contrato excluído com sucesso");
+            client.invalidateQueries({ queryKey: ["get-contracts"] });
             setOpen(false);
         },
         onError: () => {
             toast.error(
                 "Erro ao excluir o contrato! Tente novamente mais tarde.",
             );
+            setOpen(false);
         },
     });
     return (

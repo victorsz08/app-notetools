@@ -63,6 +63,7 @@ function Dashboard() {
     const { data: salesOnDay } = useSuspenseQuery(getSalesOnDay);
     const { data: contracts } = useSuspenseQuery(getContractsOnDay);
 
+    console.log(insights);
     return (
         <main className="p-6 w-full">
             <div className="mb-6 w-full flex justify-between items-center">

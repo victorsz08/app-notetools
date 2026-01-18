@@ -4,7 +4,6 @@ import type { Contract, Status, TypeContract } from "@/types";
 interface FetchContractsInput {
     page: number;
     limit: number;
-    sort?: string;
     schedulingFrom?: Date;
     schedulingTo?: Date;
     createdFrom?: Date;
@@ -24,7 +23,6 @@ interface FetchContractsResponse {
 export async function fecthContracts({
     page,
     limit,
-    sort,
     schedulingFrom,
     schedulingTo,
     createdFrom,
@@ -36,8 +34,6 @@ export async function fecthContracts({
 
     params.set("page", String(page));
     params.set("limit", String(limit));
-
-    params.set("sort", sort ? sort : "schedulingDate.desc");
 
     if (schedulingFrom && schedulingTo) {
         params.set("schedulingFrom", schedulingFrom.toISOString());

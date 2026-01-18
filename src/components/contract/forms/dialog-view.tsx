@@ -14,7 +14,8 @@ import { formatCurrency, formatDateDescription } from "@/lib/utils";
 import { BadgeStatus } from "../badge-status";
 import { BadgeType } from "../badge-type";
 import { Separator } from "@/components/ui/separator";
-import { format } from "date-fns";
+import { format, subHours } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface DialogViewContractProps {
     contract: Contract;
@@ -48,18 +49,15 @@ export function DialogViewContract({ contract }: DialogViewContractProps) {
                         <StrepViewContent>{contract.local}</StrepViewContent>
                     </StrepView>
                     <StrepView>
-                        <StrepViewTitle>Agendamento</StrepViewTitle>
+                        <StrepViewTitle>Data de Agendamento</StrepViewTitle>
                         <StrepViewContent>
-                            <div className="flex flex-col items-start gap-1">
-                                <p>
-                                    {formatDateDescription(
-                                        contract.schedulingDate,
-                                    )}
-                                </p>
-                                <p className="text-muted-foreground font-normal">
-                                    {contract.schedulingTime}
-                                </p>
-                            </div>
+                            {formatDateDescription(contract.schedulingDate)}
+                        </StrepViewContent>
+                    </StrepView>
+                    <StrepView>
+                        <StrepViewTitle>Horário de Agendamento</StrepViewTitle>
+                        <StrepViewContent>
+                            {contract.schedulingTime}
                         </StrepViewContent>
                     </StrepView>
                     <StrepView>
@@ -83,19 +81,21 @@ export function DialogViewContract({ contract }: DialogViewContractProps) {
                 </div>
                 <Separator />
                 <DialogFooter>
-                    <div className="flex flex-col text-start justify-start items-start">
+                    <div className="flex flex-col gap-1 text-start justify-start items-start">
                         <p className="font-light text-muted-foreground text-xs">
                             Criado em:{" "}
                             {format(
-                                contract.createdAt,
+                                subHours(contract.createdAt, 3),
                                 "dd/MM/yyyy 'às' HH:mm",
+                                { locale: ptBR },
                             )}
                         </p>
                         <p className="font-light text-muted-foreground text-xs">
                             Atualizado em:{" "}
                             {format(
-                                contract.updatedAt,
+                                subHours(contract.updatedAt, 3),
                                 "dd/MM/yyyy 'às' HH:mm",
+                                { locale: ptBR },
                             )}
                         </p>
                     </div>

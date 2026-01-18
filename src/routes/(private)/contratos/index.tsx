@@ -4,12 +4,17 @@ import {
 } from "@/components/contract/table/contract-filter";
 import { TableContracts } from "@/components/contract/table/table-contracts";
 import { Button } from "@/components/ui/button";
-import { Card, CardAction, CardContent, CardHeader } from "@/components/ui/card";
+import {
+    Card,
+    CardAction,
+    CardContent,
+    CardHeader,
+} from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { fecthContracts } from "@/infra/contracts/fecth-contracts";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { startOfDay, subHours } from "date-fns";
+import { endOfDay, startOfDay } from "date-fns";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
@@ -29,6 +34,10 @@ function ContractsPage() {
         typeContract: undefined,
     });
 
+    const [contractsSelected, setContractSelected] = useState<Array<string>>(
+        [],
+    );
+
     const { data } = useQuery({
         queryKey: ["get-contracts", page, filters],
         queryFn: () =>
@@ -37,16 +46,16 @@ function ContractsPage() {
                 limit: 10,
                 createdFrom:
                     filters.createdDateRange?.from &&
-                    subHours(startOfDay(filters.createdDateRange.from), 3),
+                    startOfDay(filters.createdDateRange.from),
                 createdTo:
                     filters.createdDateRange?.to &&
-                    subHours(startOfDay(filters.createdDateRange.to), 3),
+                    endOfDay(filters.createdDateRange.to),
                 schedulingFrom:
                     filters.schedulingDateRange?.from &&
-                    subHours(startOfDay(filters.schedulingDateRange.from), 3),
+                    startOfDay(filters.schedulingDateRange.from),
                 schedulingTo:
                     filters.schedulingDateRange?.to &&
-                    subHours(startOfDay(filters.schedulingDateRange.to), 3),
+                    endOfDay(filters.schedulingDateRange.to),
                 status: filters.status || undefined,
                 type: filters.typeContract || undefined,
             }),
@@ -84,6 +93,8 @@ function ContractsPage() {
                         totalPages={data.totalPages}
                         total={data.total}
                         onPageChange={setPage}
+                        contractsSelected={contractsSelected}
+                        onChangeContractsSelected={setContractSelected}
                     />
                 ) : (
                     <Card>
@@ -91,7 +102,7 @@ function ContractsPage() {
                             <CardAction>
                                 <Link to="/contratos/novo">
                                     <Button type="button">
-                                        <Plus/>
+                                        <Plus />
                                         Novo contrato
                                     </Button>
                                 </Link>
