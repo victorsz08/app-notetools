@@ -13,6 +13,7 @@ import { Route as privateLayoutRouteImport } from './routes/(private)/_layout'
 import { Route as privateIndexRouteImport } from './routes/(private)/index'
 import { Route as privateNotasLayoutRouteImport } from './routes/(private)/notas/_layout'
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
+import { Route as privatePerfilIndexRouteImport } from './routes/(private)/perfil/index'
 import { Route as privateNotasIndexRouteImport } from './routes/(private)/notas/index'
 import { Route as privateContratosIndexRouteImport } from './routes/(private)/contratos/index'
 import { Route as privateContratosNovoIndexRouteImport } from './routes/(private)/contratos/novo/index'
@@ -36,6 +37,11 @@ const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
   path: '/auth/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const privatePerfilIndexRoute = privatePerfilIndexRouteImport.update({
+  id: '/perfil/',
+  path: '/perfil/',
+  getParentRoute: () => privateLayoutRoute,
+} as any)
 const privateNotasIndexRoute = privateNotasIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/': typeof privateIndexRoute
   '/contratos': typeof privateContratosIndexRoute
   '/notas/': typeof privateNotasIndexRoute
+  '/perfil': typeof privatePerfilIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/contratos/novo': typeof privateContratosNovoIndexRoute
 }
@@ -65,6 +72,7 @@ export interface FileRoutesByTo {
   '/': typeof privateIndexRoute
   '/contratos': typeof privateContratosIndexRoute
   '/notas': typeof privateNotasIndexRoute
+  '/perfil': typeof privatePerfilIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/contratos/novo': typeof privateContratosNovoIndexRoute
 }
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   '/(private)/': typeof privateIndexRoute
   '/(private)/contratos/': typeof privateContratosIndexRoute
   '/(private)/notas/': typeof privateNotasIndexRoute
+  '/(private)/perfil/': typeof privatePerfilIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/(private)/contratos/novo/': typeof privateContratosNovoIndexRoute
 }
@@ -85,10 +94,17 @@ export interface FileRouteTypes {
     | '/'
     | '/contratos'
     | '/notas/'
+    | '/perfil'
     | '/auth/login'
     | '/contratos/novo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contratos' | '/notas' | '/auth/login' | '/contratos/novo'
+  to:
+    | '/'
+    | '/contratos'
+    | '/notas'
+    | '/perfil'
+    | '/auth/login'
+    | '/contratos/novo'
   id:
     | '__root__'
     | '/(private)'
@@ -96,6 +112,7 @@ export interface FileRouteTypes {
     | '/(private)/'
     | '/(private)/contratos/'
     | '/(private)/notas/'
+    | '/(private)/perfil/'
     | '/auth/login/'
     | '/(private)/contratos/novo/'
   fileRoutesById: FileRoutesById
@@ -134,6 +151,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/login'
       preLoaderRoute: typeof AuthLoginIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/(private)/perfil/': {
+      id: '/(private)/perfil/'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof privatePerfilIndexRouteImport
+      parentRoute: typeof privateLayoutRoute
     }
     '/(private)/notas/': {
       id: '/(private)/notas/'
@@ -174,6 +198,7 @@ interface privateLayoutRouteChildren {
   privateNotasLayoutRoute: typeof privateNotasLayoutRouteWithChildren
   privateIndexRoute: typeof privateIndexRoute
   privateContratosIndexRoute: typeof privateContratosIndexRoute
+  privatePerfilIndexRoute: typeof privatePerfilIndexRoute
   privateContratosNovoIndexRoute: typeof privateContratosNovoIndexRoute
 }
 
@@ -181,6 +206,7 @@ const privateLayoutRouteChildren: privateLayoutRouteChildren = {
   privateNotasLayoutRoute: privateNotasLayoutRouteWithChildren,
   privateIndexRoute: privateIndexRoute,
   privateContratosIndexRoute: privateContratosIndexRoute,
+  privatePerfilIndexRoute: privatePerfilIndexRoute,
   privateContratosNovoIndexRoute: privateContratosNovoIndexRoute,
 }
 

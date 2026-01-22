@@ -28,7 +28,7 @@ function NotesPage() {
 
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
-    const [debouncedContent] = useDebounce(content, 3000);
+    const [debouncedContent] = useDebounce(content, 500);
     const [debouncedTitle] = useDebounce(title, 500);
 
     const { mutate: update } = useMutation({
@@ -47,19 +47,19 @@ function NotesPage() {
     }, [note?.id]);
 
     useEffect(() => {
-        if (!note || !content) return;
+        if (!note) return;
 
-        if (debouncedContent !== note.content) {
+        if (debouncedTitle !== note.title) {
             update({
                 id: note.id,
-                title,
-                content: debouncedContent,
+                title: debouncedTitle,
+                content,
             });
         }
     }, [debouncedTitle]);
 
     useEffect(() => {
-        if (!note || !content) return;
+        if (!note) return;
 
         if (debouncedContent !== note.content) {
             update({
@@ -104,6 +104,7 @@ function NotesPage() {
                         Título:
                     </p>
                     <input
+                        key={note.id}
                         className="text-base min-w-100 outline-0 font-medium text-foreground border-none bg-card"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
