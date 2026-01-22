@@ -9,10 +9,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { updateUser } from "@/infra/user/update";
+import type { BadRequestError, User } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserRound } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { Pencil, Save, UserRound, X } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 const userSchema = z.object({
@@ -44,6 +48,35 @@ export function FormUser({ user }: FormUserProps) {
         },
     });
 
+    const { mutate: update, isPending } = useMutation({
+        mutationKey: ["update-user"],
+        mutationFn: async (data: FormUpdateUser) => {
+            await updateUser({
+                id: user.id,
+                username: data.username,
+                firstName: data.firstName,
+                lastName: data.lastName,
+            });
+
+            return;
+        },
+        onSuccess: () => {
+            toast.success("Dados atualizados com sucesso!");
+            setEditing(false);
+        },
+        onError: (error: BadRequestError<keyof FormUpdateUser>) => {
+            for (const err of error.errors) {
+                form.setError(err.path, {
+                    message: err.message,
+                });
+            }
+        },
+    });
+
+    function onSubmit(data: FormUpdateUser) {
+        update(data);
+    }
+
     return (
         <Card>
             <CardHeader>
@@ -58,7 +91,7 @@ export function FormUser({ user }: FormUserProps) {
                                     {user.firstName} {user.lastName}
                                 </p>
                                 <p className="text-xs font-light text-muted-foreground">
-                                    {user.username}
+                                    @{user.username}
                                 </p>
                             </div>
                         </div>
@@ -71,7 +104,10 @@ export function FormUser({ user }: FormUserProps) {
                     <p className="text-sm font-bold text-muted-foreground mb-3">
                         MEUS DADOS
                     </p>
-                    <form className="flex flex-col space-y-6">
+                    <form
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className="flex flex-col space-y-6"
+                    >
                         <FormField
                             name="username"
                             control={form.control}
@@ -120,26 +156,36 @@ export function FormUser({ user }: FormUserProps) {
                                 </FormItem>
                             )}
                         />
+
+                        <div className="mt-6">
+                            {editing ? (
+                                <div className="flex justify-end gap-2">
+                                    <Button
+                                        onClick={() => setEditing(false)}
+                                        variant="secondary"
+                                        type="button"
+                                    >
+                                        <X />
+                                        Cancelar
+                                    </Button>
+                                    <Button disabled={isPending}>
+                                        {isPending ? "Salvando..." : "Salvar"}
+                                        <Save />
+                                    </Button>
+                                </div>
+                            ) : (
+                                <div className="flex justify-end gap-2">
+                                    <Button
+                                        type="button"
+                                        onClick={() => setEditing(true)}
+                                    >
+                                        Atualizar dados
+                                        <Pencil />
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
                     </form>
-                    <div className="mt-6">
-                        {editing ? (
-                            <div className="flex justify-end gap-2">
-                                <Button
-                                    onClick={() => setEditing(false)}
-                                    variant="secondary"
-                                >
-                                    Cancelar
-                                </Button>
-                                <Button>Salvar</Button>
-                            </div>
-                        ) : (
-                            <div className="flex justify-end gap-2">
-                                <Button onClick={() => setEditing(true)}>
-                                    Atualizar dados
-                                </Button>
-                            </div>
-                        )}
-                    </div>
                 </Form>
             </CardContent>
         </Card>
