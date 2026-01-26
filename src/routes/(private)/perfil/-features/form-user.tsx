@@ -13,7 +13,7 @@ import { updateUser } from "@/infra/user/update";
 import type { BadRequestError } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Pencil, Save, UserRound, X } from "lucide-react";
+import { UserRound } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
