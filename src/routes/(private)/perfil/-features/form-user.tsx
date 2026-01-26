@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     Form,
     FormField,
@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { updateUser } from "@/infra/user/update";
-import type { BadRequestError, User } from "@/types";
+import type { BadRequestError } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Pencil, Save, UserRound, X } from "lucide-react";
@@ -101,9 +101,9 @@ export function FormUser({ user }: FormUserProps) {
             </CardHeader>
             <CardContent>
                 <Form {...form}>
-                    <p className="text-sm font-bold text-muted-foreground mb-3">
-                        MEUS DADOS
-                    </p>
+                    <CardTitle className="text-lg mb-4 text-primary">
+                        Atualizar dados
+                    </CardTitle>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="flex flex-col space-y-6"
@@ -165,12 +165,10 @@ export function FormUser({ user }: FormUserProps) {
                                         variant="secondary"
                                         type="button"
                                     >
-                                        <X />
                                         Cancelar
                                     </Button>
                                     <Button disabled={isPending}>
                                         {isPending ? "Salvando..." : "Salvar"}
-                                        <Save />
                                     </Button>
                                 </div>
                             ) : (
@@ -180,7 +178,6 @@ export function FormUser({ user }: FormUserProps) {
                                         onClick={() => setEditing(true)}
                                     >
                                         Atualizar dados
-                                        <Pencil />
                                     </Button>
                                 </div>
                             )}
