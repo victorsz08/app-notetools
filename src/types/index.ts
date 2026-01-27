@@ -59,3 +59,11 @@ export interface Note {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface FecthCepResponse {
+    street: string;
+    neighborhood: string;
+    city: string;
+    state: string;
+    cep: string;
+}

@@ -74,9 +74,9 @@ function NotesPage() {
         return (
             <div className="grid justify-center items-center h-screen w-full">
                 <div className="flex flex-col gap-1 items-center">
-                    <Notebook className="text-foreground/80 w-8 h-8" />
-                    <p className="text-sm font-light text-foreground/80">
-                        Selecione uma nota
+                    <Notebook className="text-foreground/80 w-12 h-12" />
+                    <p className="text-xl font-light text-foreground/80">
+                        Selecione uma Anotação
                     </p>
                 </div>
             </div>
@@ -88,8 +88,8 @@ function NotesPage() {
             <div className="grid justify-center items-center h-screen w-full">
                 <div className="flex flex-col gap-1 items-center">
                     <Notebook className="text-foreground/80 w-8 h-8" />
-                    <p className="text-sm font-light text-foreground/80">
-                        Selecione uma nota
+                    <p className="text-xl font-light text-foreground/80">
+                        Selecione uma Anotação
                     </p>
                 </div>
             </div>

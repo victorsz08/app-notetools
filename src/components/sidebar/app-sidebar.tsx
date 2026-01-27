@@ -1,11 +1,4 @@
-import {
-    Clipboard,
-    Home,
-    LogOut,
-    Notebook,
-    UserRound,
-    Wrench,
-} from "lucide-react";
+import { Clipboard, Home, LogOut, Notebook, UserRound } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarHeader } from "../ui/sidebar";
 import { HeaderSidebar } from "./header-sidebar";
 import { MenuItems, type MenuItemProps } from "./menu";
@@ -30,11 +23,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             label: "Notas",
             href: "/notas",
             icon: Notebook,
-        },
-        {
-            label: "Ferramentas",
-            href: "/ferramentas",
-            icon: Wrench,
         },
     ];
 

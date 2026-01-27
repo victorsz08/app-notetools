@@ -9,6 +9,7 @@ import { fecthContracts } from "@/infra/contracts/fecth-contracts";
 import { ContractsOnDay } from "./-features/contracts/contracts-on-day";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { FormFindStreet } from "@/components/cep/form-find-street";
 
 const startDate = startOfMonth(new Date());
 const endDate = new Date();
@@ -85,6 +86,7 @@ function Dashboard() {
             <div className="space-y-4">
                 <Insights data={insights} />
                 <ChartBarSales data={salesOnDay.sales} />
+                <FormFindStreet />
                 <ContractsOnDay data={contracts.contracts} />
             </div>
         </main>
